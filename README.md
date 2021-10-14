@@ -23,9 +23,10 @@ Data description
 **Required data range**: [0..1].
 
 To compute instant (obtained  for a specific date) msavi2 image $I^t$ use follow formulas:
-$$
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;I^t = \frac{(NIR^t - RED^t) * (1 + L^t)}{(NIR^t + RED^t + L^t)}," title="\Large I^t = \frac{(NIR^t - RED^t) * (1 + L^t)}{(NIR^t + RED^t + L^t)}," />
+<!-- $$
 I^t = \frac{(NIR^t - RED^t) * (1 + L^t)}{(NIR^t + RED^t + L^t)},
-$$
+$$ -->
 
 $$
 L^t = 1 - 0.5\cdot(2NIR^t + 1 - \sqrt{(2NIR^t + 1)^2 - 8(NIR^t - RED^t))}),
