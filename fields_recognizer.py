@@ -350,7 +350,8 @@ def run(
     w_closing: int,
     low_veg_thresh: float,
     min_area_thresh: float,
-    max_area_thresh: float
+    max_area_thresh: float,
+    spatial_resolution: int
 ):
     """
     The main runner function.
@@ -360,9 +361,31 @@ def run(
     output : None
         The result is saved as json file with found fields contours.
 
+    Parameters
+    ----------
+    index_img_path : Path
+        The aggregated msavi2 image path.
+    edges_img_path : Path
+        The accumulated edges image path.
+    w_dilate : int
+        The radius of the disk-shaped footprint
+        used for dilate low vegetation mask.
+    w_closing : int
+        The radius of the disk-shaped footprint
+        used for closing edges map.
+    low_veg_thresh : float
+        The low vegetation threshold used for generate the low vegetation mask.
+        It lies in range (0; 1).
+    min_area_thresh : float
+        The minimum field area threshold.
+    max_area_thresh : float
+        The maximum field area threshold.
+    spatial_resolution : int
+        The image spatial resolution, m/pixel.
+
     Notes
     -----
-    For correct result the images should be of float32 type with values from
+    For correct result the images should be of float32 type with values in
     [0; 1] range.
     """
 
@@ -371,10 +394,15 @@ def run(
 
     edges_img = imread(edges_img_path)
 
+    resolution_factor = (spatial_resolution * 1e-3) ** 2
+    min_area_thresh = min_area_thresh / resolution_factor
+    max_area_thresh = max_area_thresh / resolution_factor
+
     result_json = find_fields(
         index_img, edges_img, w_dilate, w_closing,
         low_veg_thresh, min_area_thresh, max_area_thresh
         )
+
     write_json(result_json, output_path)
 
 
@@ -388,16 +416,18 @@ if __name__ == "__main__":
     parser.add_argument(
         "output_path", type=Path, help="path to output directory")
     parser.add_argument(
-        "--w-dilate", type=int, help="struct element size", default=5)
+        "-wd", "--w-dilate", type=int, help="struct element size", default=5)
     parser.add_argument(
-        "--w-closing", type=int, help="struct element size", default=2)
+        "-wc", "--w-closing", type=int, help="struct element size", default=2)
     parser.add_argument(
-        "--low-veg-thresh", type=float, help="low vegetation threshold value",
+        "-low", "--low-veg-thresh", type=float, help="low vegetation threshold value",
         default=0.1569)
     parser.add_argument(
-        "--min-area-thresh", type=int, help="min area threshold", default=500)
+        "-minar", "--min-area-thresh", type=float, help="min area threshold, km^2", default=0.05)
     parser.add_argument(
-        "--max-area-thresh", type=int, help="max area threshold", default=1e7)
+        "-maxar", "--max-area-thresh", type=float, help="max area threshold, km^2", default=1e3)
+    parser.add_argument(
+        "-res", "--spatial-resolution", type=int, help="image spatial resolution, m/pixel", default=10)
     args = parser.parse_args()
     run(**vars(args))
 
