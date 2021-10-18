@@ -84,9 +84,9 @@ Examples
 Example of the algoithm usage (38ULB area).
 
 Download the following files from [repository](https://zenodo.org/record/5571868) to the folder with the `fields_recognizer.py` script:
-- ground truth parcel contours `38ULB_markup.json`;
-- aggregated msavi2 image `38ULB_msavi2.tiff`;
-- edges map `38ULB_edges.tiff`.
+- ground truth parcel contours `38ULB_markup.json` (from `markup.zip`);
+- aggregated msavi2 image `38ULB_msavi2.tiff` (from `demo.zip`);
+- edges map `38ULB_edges.tiff` (from `demo.zip`).
 
 Next run the aglorithm with:
 ```
